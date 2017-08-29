@@ -29,10 +29,14 @@ from front.wiapi import *
 from front import D
 from cyclone import web, escape
 
-
+@handler
 class RegisterHandler(ApiHandler):
     @storage.databaseSafe
     @defer.inlineCallbacks
+    @api('User register', '/user/register/', [
+        Param('username', True, str, 'putaogame', 'putaogame', 'username'),
+        Param('password', True, str, 'putaogame', 'putaogame', 'password'),
+    ], filters=[ps_filter], description="User register")
     def get(self):
         try:
             username = self.get_argument("username")
@@ -73,26 +77,33 @@ class RegisterHandler(ApiHandler):
             self.write(dict(err=E.ERR_USER_REPEAT, msg=E.errmsg(E.ERR_USER_REPEAT)))
             return
 
-
+@handler
 class LoginHandler(ApiHandler):
     @storage.databaseSafe
     @defer.inlineCallbacks
+    @api('User login', '/user/login/', [
+        Param('username', False, str, 'putaogame', 'putaogame', 'username'),
+        Param('password', False, str, 'putaogame', 'putaogame', 'password'),
+        Param('user_id', False, str, '1', '1', 'user_id'),
+        Param('_access_token', False, str, 'putaogame', 'putaogame', '_access_token'),
+        Param('_refresh_token', False, str, 'putaogame', 'putaogame', '_refresh_token'),
+    ], filters=[ps_filter], description="User login")
     def get(self):
         try:
             username = self.get_argument("username", None)
             password = self.get_argument("password", None)
             user_id = self.get_argument("user_id", None)
-            _access_token = self.get_argument("access_token", None)
-            _refresh_token = self.get_argument("refresh_token", None)
+            access_token = self.get_argument("access_token", None)
+            refresh_token = self.get_argument("refresh_token", None)
         except Exception:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
         if username and password:
-            query = "SELECT username, password_hash, access_token, refresh_token FROM core_user WHERE username=%s AND" \
+            query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE username=%s AND" \
                     " password_hash=%s LIMIT 1"
             r = yield self.sql.runQuery(query, (username, pwd_context.encrypt(password)))
             if r:
-                username, password_hash, access_token, refresh_token = r[0]
+                user_id, username, password_hash, _access_token, _refresh_token = r[0]
                 access_token_redis = self.redis.get('access_token:%s' % access_token)
                 if not access_token_redis:
                     access_token = binascii.hexlify(os.urandom(20)).decode()
@@ -112,15 +123,15 @@ class LoginHandler(ApiHandler):
             else:
                 self.write(dict(err=E.ERR_USER_PASSWORD, msg=E.errmsg(E.ERR_USER_PASSWORD)))
                 return
-        elif _access_token and user_id:
-            query = "SELECT username, password_hash, access_token, refresh_token FROM core_user WHERE user_id=%s AND" \
+        elif access_token and user_id:
+            query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE user_id=%s AND" \
                     " access_token=%s LIMIT 1"
-            r = yield self.sql.runQuery(query, (user_id, _access_token))
+            r = yield self.sql.runQuery(query, (user_id, access_token))
             if r:
-                username, password_hash, access_token, refresh_token = r[0]
+                user_id, username, password_hash, access_token, refresh_token = r[0]
                 access_token_redis = self.redis.get('access_token:%s' % access_token)
                 if not access_token_redis:
-                    if _refresh_token:
+                    if refresh_token:
                         pass
                     else:
                         self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
