@@ -63,7 +63,6 @@ class RegisterHandler(ApiHandler):
                     break
                 except storage.IntegrityError:
                     log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
-                    sql = None
                     continue
             print sql
             if sql:
