@@ -56,6 +56,7 @@ class RegisterHandler(ApiHandler):
             query = "INSERT INTO core_user(username, password_hash, access_token, refresh_token, created, modified)" \
                     " VALUES (%s, %s, %s, %s, %s, %s) RETURNING id"
             params = (username, password_hash, access_token, refresh_token, created, modified)
+            print query % params
             for i in range(5):
                 try:
                     sql = yield self.sql.runOperation(query, params)
