@@ -140,6 +140,7 @@ class E(object):
     ERR_USER_PASSWORD = 106
     ERR_USER_TOKEN_EXPIRE = 107
     ERR_USER_TOKEN = 108
+    ERR_USER_REFRESH_TOKEN = 109
     #ERR_USER_CREATED = 105
     ERR_NOTENOUGH_HP = 201
     ERR_NOTENOUGH_GOLD = 202
@@ -232,8 +233,9 @@ class E(object):
         ERR_USER_BEBANKED: u'账户已被封',
         ERR_USER_REPEAT: u'用户名重复',
         ERR_USER_PASSWORD: u'用户名或密码错误',
-        ERR_USER_TOKEN_EXPIRE: u'Token过期,请重新登录',
-        ERR_USER_TOKEN: u'Token错误',
+        ERR_USER_TOKEN_EXPIRE: u'Access_token过期,请重新登录',
+        ERR_USER_TOKEN: u'Access_token错误',
+        ERR_USER_REFRESH_TOKEN: u'Refresh_token错误',
         ERR_NOTENOUGH_HP: u'体力不足',
         ERR_NOTENOUGH_GOLD: u'金币不足',
         ERR_NOTENOUGH_ROCK: u'钻石不足',
