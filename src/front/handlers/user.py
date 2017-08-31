@@ -109,7 +109,7 @@ class LoginHandler(ApiHandler):
                     _access_token = binascii.hexlify(os.urandom(20)).decode()
                     _refresh_token = binascii.hexlify(os.urandom(20)).decode()
                     query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
-                    params = (_access_token, _refresh_token, int(time.time()))
+                    params = (_access_token, _refresh_token, int(time.time()), user_id)
                     for i in range(5):
                         try:
                             yield self.sql.runOperation(query, params)
@@ -128,18 +128,18 @@ class LoginHandler(ApiHandler):
                     " access_token=%s LIMIT 1"
             r = yield self.sql.runQuery(query, (user_id, access_token))
             if r:
-                user_id, username, password_hash, access_token, refresh_token = r[0]
-                access_token_redis = self.redis.get('access_token:%s' % access_token)
+                user_id, username, password_hash, _access_token, _refresh_token = r[0]
+                access_token_redis = self.redis.get('access_token:%s' % _access_token)
                 if not access_token_redis:
                     if refresh_token:
                         pass
                     else:
                         self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
                         return
-                access_token = binascii.hexlify(os.urandom(20)).decode()
-                refresh_token = binascii.hexlify(os.urandom(20)).decode()
+                _access_token = binascii.hexlify(os.urandom(20)).decode()
+                _refresh_token = binascii.hexlify(os.urandom(20)).decode()
                 query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
-                params = (access_token, refresh_token, int(time.time()), user_id)
+                params = (_access_token, _refresh_token, int(time.time()), user_id)
                 for i in range(5):
                     try:
                         yield self.sql.runOperation(query, params)
@@ -147,8 +147,8 @@ class LoginHandler(ApiHandler):
                     except storage.IntegrityError:
                         log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                         continue
-                self.redis.set('access_token:%s' % access_token, user_id, D.EXPIRATION)
-                self.write(dict(user_id=user_id, access_token=access_token, refresh_token=refresh_token))
+                self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
+                self.write(dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token))
                 return
 
             else:
