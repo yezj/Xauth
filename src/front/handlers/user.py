@@ -65,7 +65,7 @@ class RegisterHandler(ApiHandler):
                     log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                     sql = None
                     continue
-
+            print sql
             if sql:
                 user_id = sql[0][0]
                 self.redis.set('access_token:%s' % access_token, user_id, ex=D.EXPIRATION)
