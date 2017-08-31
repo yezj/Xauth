@@ -85,8 +85,8 @@ class LoginHandler(ApiHandler):
         Param('username', False, str, 'putaogame', 'putaogame', 'username'),
         Param('password', False, str, 'putaogame', 'putaogame', 'password'),
         Param('user_id', False, str, '1', '1', 'user_id'),
-        Param('_access_token', False, str, 'putaogame', 'putaogame', '_access_token'),
-        Param('_refresh_token', False, str, 'putaogame', 'putaogame', '_refresh_token'),
+        Param('access_token', False, str, 'putaogame', 'putaogame', 'access_token'),
+        Param('refresh_token', False, str, 'putaogame', 'putaogame', 'refresh_token'),
     ], filters=[ps_filter], description="User login")
     def get(self):
         try:
