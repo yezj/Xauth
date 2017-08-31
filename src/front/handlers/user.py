@@ -134,7 +134,7 @@ class LoginHandler(ApiHandler):
                 user_id, username, password_hash, _access_token, _refresh_token = r[0]
                 access_token_redis = self.redis.get('access_token:%s' % _access_token)
                 if not access_token_redis:
-                    if self.has_arg("refresh_token"):
+                    if self.has_arg("refresh_token") and self.arg("refresh_token") == _refresh_token:
                         _access_token = binascii.hexlify(os.urandom(20)).decode()
                         _refresh_token = binascii.hexlify(os.urandom(20)).decode()
                         query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
@@ -151,7 +151,7 @@ class LoginHandler(ApiHandler):
                         self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
                         return
                 else:
-                    if self.has_arg("refresh_token"):
+                    if self.has_arg("refresh_token") and self.arg("refresh_token") == _refresh_token:
                         _access_token = binascii.hexlify(os.urandom(20)).decode()
                         _refresh_token = binascii.hexlify(os.urandom(20)).decode()
                         query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
