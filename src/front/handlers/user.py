@@ -118,7 +118,7 @@ class LoginHandler(ApiHandler):
                         except storage.IntegrityError:
                             log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                             continue
-                self.redis.setnx('access_token:%s' % _access_token, user_id, D.EXPIRATION)
+                self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
                 self.write(dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token))
                 return
             else:
@@ -148,7 +148,7 @@ class LoginHandler(ApiHandler):
                         self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
                         return
 
-                self.redis.setnx('access_token:%s' % _access_token, user_id, D.EXPIRATION)
+                self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
                 self.write(dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token))
                 return
 
