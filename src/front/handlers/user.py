@@ -124,7 +124,7 @@ class LoginHandler(ApiHandler):
                 self.write(dict(err=E.ERR_USER_PASSWORD, msg=E.errmsg(E.ERR_USER_PASSWORD)))
                 return
         elif access_token and user_id:
-            query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE user_id=%s AND" \
+            query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE id=%s AND" \
                     " access_token=%s LIMIT 1"
             r = yield self.sql.runQuery(query, (user_id, access_token))
             if r:
