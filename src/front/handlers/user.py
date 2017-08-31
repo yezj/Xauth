@@ -117,7 +117,7 @@ class LoginHandler(ApiHandler):
                         except storage.IntegrityError:
                             log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                             continue
-                self.redis.set('access_token:%s' % access_token, user_id, ex=D.EXPIRATION)
+                self.redis.set('access_token:%s' % access_token, user_id, D.EXPIRATION)
                 self.write(dict(user_id=user_id, access_token=access_token, refresh_token=refresh_token))
                 return
             else:
@@ -147,7 +147,7 @@ class LoginHandler(ApiHandler):
                     except storage.IntegrityError:
                         log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                         continue
-                self.redis.set('access_token:%s' % access_token, user_id, ex=D.EXPIRATION)
+                self.redis.set('access_token:%s' % access_token, user_id, D.EXPIRATION)
                 self.write(dict(user_id=user_id, access_token=access_token, refresh_token=refresh_token))
                 return
 
