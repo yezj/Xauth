@@ -150,6 +150,20 @@ class LoginHandler(ApiHandler):
                     else:
                         self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
                         return
+                else:
+                    if self.has_arg("refresh_token"):
+                        _access_token = binascii.hexlify(os.urandom(20)).decode()
+                        _refresh_token = binascii.hexlify(os.urandom(20)).decode()
+                        query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
+                        params = (_access_token, _refresh_token, int(time.time()), user_id)
+                        for i in range(5):
+                            try:
+                                yield self.sql.runOperation(query, params)
+                                break
+                            except storage.IntegrityError:
+                                log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
+                                continue
+                        self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
 
                 self.write(dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token))
                 return
