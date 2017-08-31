@@ -29,6 +29,7 @@ from front.wiapi import *
 from front import D
 from cyclone import web, escape
 
+
 @handler
 class RegisterHandler(ApiHandler):
     @storage.databaseSafe
@@ -48,7 +49,7 @@ class RegisterHandler(ApiHandler):
             (username, password))
         if not res:
             username = username
-            password_hash = password#pwd_context.encrypt(password)
+            password_hash = password  # pwd_context.encrypt(password)
             access_token = str(binascii.hexlify(os.urandom(20)).decode())
             refresh_token = str(binascii.hexlify(os.urandom(20)).decode())
             created = int(time.time())
@@ -76,6 +77,7 @@ class RegisterHandler(ApiHandler):
         else:
             self.write(dict(err=E.ERR_USER_REPEAT, msg=E.errmsg(E.ERR_USER_REPEAT)))
             return
+
 
 @handler
 class LoginHandler(ApiHandler):
@@ -144,11 +146,11 @@ class LoginHandler(ApiHandler):
                             except storage.IntegrityError:
                                 log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                                 continue
+                        self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
                     else:
                         self.write(dict(err=E.ERR_USER_TOKEN_EXPIRE, msg=E.errmsg(E.ERR_USER_TOKEN_EXPIRE)))
                         return
 
-                self.redis.set('access_token:%s' % _access_token, user_id, D.EXPIRATION)
                 self.write(dict(user_id=user_id, access_token=_access_token, refresh_token=_refresh_token))
                 return
 
