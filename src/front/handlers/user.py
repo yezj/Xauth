@@ -139,7 +139,7 @@ class LoginHandler(ApiHandler):
                 access_token = binascii.hexlify(os.urandom(20)).decode()
                 refresh_token = binascii.hexlify(os.urandom(20)).decode()
                 query = "UPDATE core_user SET access_token=%s, refresh_token=%s, modified=%s WHERE id=%s"
-                params = (access_token, refresh_token, int(time.time()))
+                params = (access_token, refresh_token, int(time.time()), user_id)
                 for i in range(5):
                     try:
                         yield self.sql.runOperation(query, params)
