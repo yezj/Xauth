@@ -49,8 +49,8 @@ class RegisterHandler(ApiHandler):
         if not res:
             username = username
             password_hash = password#pwd_context.encrypt(password)
-            access_token = binascii.hexlify(os.urandom(20)).decode()
-            refresh_token = binascii.hexlify(os.urandom(20)).decode()
+            access_token = str(binascii.hexlify(os.urandom(20)).decode())
+            refresh_token = str(binascii.hexlify(os.urandom(20)).decode())
             created = int(time.time())
             modified = int(time.time())
             query = "INSERT INTO core_user(username, password_hash, access_token, refresh_token, created, modified)" \
