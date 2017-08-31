@@ -98,6 +98,7 @@ class LoginHandler(ApiHandler):
         except Exception:
             self.write(dict(err=E.ERR_ARGUMENT, msg=E.errmsg(E.ERR_ARGUMENT)))
             return
+        print self.has_arg(access_token), self.has_arg(user_id)
         if username and password:
             query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE username=%s AND" \
                     " password_hash=%s LIMIT 1"
