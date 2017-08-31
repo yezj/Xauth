@@ -27,7 +27,7 @@ class User(models.Model):
     username = models.CharField(_('Username'), max_length=32, unique=True)
     password_hash = models.CharField(_('Password_hash'), max_length=128, blank=True)
     access_token = models.CharField(_('Access_token'), max_length=128, unique=True)
-    refresh_token = models.CharField(_('Refresh_token'), max_length=42, unique=True)
+    refresh_token = models.CharField(_('Refresh_token'), max_length=128, unique=True)
     created = models.PositiveIntegerField(_('Created'), default=0, db_index=True)
     modified = models.PositiveIntegerField(_('Modified'), default=0, db_index=True)
 
