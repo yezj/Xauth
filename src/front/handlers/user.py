@@ -48,7 +48,7 @@ class RegisterHandler(ApiHandler):
             (username, pwd_context.encrypt(password)))
         if not res:
             username = username
-            password_hash = pwd_context.encrypt(password)
+            password_hash = password#pwd_context.encrypt(password)
             access_token = binascii.hexlify(os.urandom(20)).decode()
             refresh_token = binascii.hexlify(os.urandom(20)).decode()
             created = int(time.time())
@@ -101,7 +101,7 @@ class LoginHandler(ApiHandler):
         if username and password:
             query = "SELECT id, username, password_hash, access_token, refresh_token FROM core_user WHERE username=%s AND" \
                     " password_hash=%s LIMIT 1"
-            r = yield self.sql.runQuery(query, (username, pwd_context.encrypt(password)))
+            r = yield self.sql.runQuery(query, (username, password))
             if r:
                 user_id, username, password_hash, _access_token, _refresh_token = r[0]
                 access_token_redis = self.redis.get('access_token:%s' % access_token)
