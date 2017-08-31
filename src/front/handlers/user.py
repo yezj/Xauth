@@ -59,14 +59,14 @@ class RegisterHandler(ApiHandler):
             print query % params
             for i in range(5):
                 try:
-                    sql = yield self.sql.runOperation(query, params)
+                    user = yield self.sql.runQuery(query, params)
                     break
                 except storage.IntegrityError:
                     log.msg("SQL integrity error, retry(%i): %s" % (i, (query % params)))
                     continue
-            print sql
-            if sql:
-                user_id = sql[0][0]
+            print user
+            if user:
+                user_id = user[0][0]
                 self.redis.set('access_token:%s' % access_token, user_id, ex=D.EXPIRATION)
                 self.write(dict(user_id=user_id, access_token=access_token, refresh_token=refresh_token))
                 return
