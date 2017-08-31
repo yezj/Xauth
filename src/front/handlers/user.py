@@ -53,7 +53,7 @@ class RegisterHandler(ApiHandler):
             refresh_token = binascii.hexlify(os.urandom(20)).decode()
             created = int(time.time())
             modified = int(time.time())
-            query = "INSERT INTO core_user(username, password, access_token, refresh_token, created, modified)" \
+            query = "INSERT INTO core_user(username, password_hash, access_token, refresh_token, created, modified)" \
                     " VALUES (%s, %s, %s, %s, %s, %s) RETURNING id"
             params = (username, password_hash, access_token, refresh_token, created, modified)
             for i in range(5):
