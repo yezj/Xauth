@@ -45,7 +45,7 @@ class RegisterHandler(ApiHandler):
             raise web.HTTPError(400, "Argument error")
         res = yield self.sql.runQuery(
             "SELECT id, username, password_hash FROM core_user WHERE username=%s AND password_hash=%s LIMIT 1",
-            (username, pwd_context.encrypt(password)))
+            (username, password))
         if not res:
             username = username
             password_hash = password#pwd_context.encrypt(password)
