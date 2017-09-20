@@ -133,7 +133,7 @@ class LoginHandler(ApiHandler):
             if r:
                 user_id, username, password_hash, _access_token, _refresh_token = r[0]
                 access_token_redis = yield self.redis.get('access_token:%s' % _access_token)
-                print 'access_token_redis', access_token_redis
+                #print 'access_token_redis', access_token_redis
                 if not access_token_redis:
                     if self.has_arg("refresh_token"):
                         if self.arg("refresh_token") == _refresh_token:
