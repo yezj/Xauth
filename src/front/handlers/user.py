@@ -35,8 +35,8 @@ class RegisterHandler(ApiHandler):
     @storage.databaseSafe
     @defer.inlineCallbacks
     @api('User register', '/user/register/', [
-        Param('username', True, str, 'putaogame', 'putaogame', 'username'),
-        Param('password', True, str, 'putaogame', 'putaogame', 'password'),
+        Param('username', True, str, 'test1', 'test1', 'username'),
+        Param('password', True, str, 'test1', 'test1', 'password'),
     ], filters=[ps_filter], description="User register")
     def get(self):
         try:
@@ -84,8 +84,8 @@ class LoginHandler(ApiHandler):
     @storage.databaseSafe
     @defer.inlineCallbacks
     @api('User login', '/user/login/', [
-        Param('username', False, str, 'putaogame', 'putaogame', 'username'),
-        Param('password', False, str, 'putaogame', 'putaogame', 'password'),
+        Param('username', False, str, 'test1', 'test1', 'username'),
+        Param('password', False, str, 'test1', 'test1', 'password'),
         Param('user_id', False, str, '1', '1', 'user_id'),
         Param('access_token', False, str, 'bb6ab3286a923c66088f790c395c0d11019c075b', 'bb6ab3286a923c66088f790c395c0d11019c075b', 'access_token'),
         Param('refresh_token', False, str, 'bb6ab3286a923c66088f790c395c0d11019c075b', 'bb6ab3286a923c66088f790c395c0d11019c075b', 'refresh_token'),
