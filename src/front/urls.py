@@ -8,7 +8,7 @@ from front.handlers import user
 from local_settings import DEBUG
 
 url_patterns = [
-    (r'/', home.HomeHandler),
+    #(r'/', home.HomeHandler),
     # (r'/active/', home.ActiveHandler),
     # (r'/startup/', home.StartupHandler),
     # (r'/sync/', home.SyncHandler),
