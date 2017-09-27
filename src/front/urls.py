@@ -2,7 +2,7 @@ import cyclone.web
 import api_doc
 from twisted.internet.tcp import _AbortingMixin
 from wiapi import api_manager
-#from front.handlers import home
+from front.handlers import home
 from front.handlers import user
 
 from local_settings import DEBUG

@@ -31,7 +31,7 @@ class CrossdomainHandler(ApiHandler):
     def post(self):
         self.render('crossdomain.xml')
 
-@handler
+
 class StartupHandler(ApiHandler):
 
     @storage.databaseSafe
@@ -78,7 +78,7 @@ class StartupHandler(ApiHandler):
         reb = zlib.compress(escape.json_encode(ret))
         self.write(ret)
 
-@handler
+
 class ActiveHandler(ApiHandler):
 
     @storage.databaseSafe
@@ -129,7 +129,7 @@ class ActiveHandler(ApiHandler):
         reb = zlib.compress(escape.json_encode(ret))
         self.write(ret)
 
-@handler
+
 class SyncHandler(ApiHandler):
 
     @storage.databaseSafe
@@ -219,7 +219,7 @@ class SyncHandler(ApiHandler):
         reb = zlib.compress(escape.json_encode(ret))
         self.write(ret)
 
-@handler
+
 class DotHandler(ApiHandler):
 
     @storage.databaseSafe
@@ -243,7 +243,7 @@ class DotHandler(ApiHandler):
         reb = zlib.compress(escape.json_encode(ret))
         self.write(ret)
 
-@handler
+
 class HpHandler(ApiHandler):
 
     @storage.databaseSafe
@@ -261,7 +261,7 @@ class HpHandler(ApiHandler):
         reb = zlib.compress(escape.json_encode(ret))
         self.write(ret)
 
-@handler
+
 class SyncdbHandler(ApiHandler):
 
     @storage.databaseSafe
@@ -345,7 +345,7 @@ class SyncdbHandler(ApiHandler):
 
         self.write("SYNC SUCCESS")
 
-@handler
+
 class SyncactHandler(ApiHandler):
 
     @storage.databaseSafe
@@ -368,7 +368,7 @@ class SyncactHandler(ApiHandler):
         reb = zlib.compress(escape.json_encode(ret))
         self.write(ret)
 
-@handler
+
 class FlushdbHandler(ApiHandler):
 
     @storage.databaseSafe
@@ -380,7 +380,7 @@ class FlushdbHandler(ApiHandler):
         self.redis.flushdb()
         self.write("FLUSHDB SUCCESS")
 
-@handler
+
 class DelcacheHandler(ApiHandler):
 
     @storage.databaseSafe
